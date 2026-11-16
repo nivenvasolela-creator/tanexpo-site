@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="TANEXPO: compare verified Tanzanian tour operators and book directly. Operators get leads on WhatsApp and run their business from one dashboard.">
+<meta name="theme-color" content="#284435">
+<meta property="og:title" content="TANEXPO — Tanzania's tourism marketplace">
+<meta property="og:description" content="Travellers book verified local operators. Operators get leads on WhatsApp.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%3E%0A%20%20%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%23284435%22%20/%3E%0A%20%20%3C%21--%20Stylized%20safari%20mountain%20%26%20compass%20star%20--%3E%0A%20%20%3Cpath%20d%3D%22M16%204%20L19%2013%20L28%2016%20L19%2019%20L16%2028%20L13%2019%20L4%2016%20L13%2013%20Z%22%20fill%3D%22%23E8B94A%22%20/%3E%0A%20%20%3Cpath%20d%3D%22M16%208%20L18%2014%20L24%2016%20L18%2018%20L16%2024%20L14%2018%20L8%2016%20L14%2014%20Z%22%20fill%3D%22%23D97843%22%20/%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%222.5%22%20fill%3D%22%23FAF7F2%22%20/%3E%0A%3C/svg%3E%0A">
+<title>TANEXPO — Tanzania Tourism Marketplace</title>
+<style>
+/* Layout: glass header → split hero with a painted Tanzania horizon → traveller destinations → how it works → dark "operator OS" band with live pipeline + WhatsApp → launch cities → two-door sign-up. Tokens from the TANEXPO design system. */
+:root{
+  --bg:#FAF7F2; --surface:#FFFFFF; --surface-muted:#F3EFE6; --glass:rgba(255,255,255,.78);
+  --border:rgba(217,206,191,.85); --text:#1F2A24; --muted:#52645A; --hint:#6B7A72;
+  --green:#284435; --green-deep:#192C23; --heading:#284435; --ochre:#D97843; --ochre-hover:#C26735; --ochre-ink:#B5562A;
+  --gold:#E8B94A; --sand:#F7F3E9; --ochre-tint:#FAF0E9; --green-tint:#EAF3EC; --gold-tint:#FAF7E8; --on-brand:#FFFFFF;
+  /* scene paints */
+  --sky-1:#F6E3C6; --sky-2:#F9EEDC; --hill-1:#C9B48E; --hill-2:#8E9A6B; --hill-3:#4F6B4F; --hill-4:#284435; --snow:#FFFFFF; --sea:#7FB3AE;
+  /* operator band (stays dark in both themes) */
+  --band:#121D17; --band-card:#1A2820; --band-line:#2B4034; --band-text:#EDF3EF; --band-muted:#A7B9B0;
+  --serif:Georgia,Cambria,"Times New Roman",Times,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r-xl:12px; --r-2xl:16px; --r-3xl:24px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1511; --surface:#152019; --surface-muted:#1A2820; --glass:rgba(21,32,25,.82);
+  --border:rgba(46,69,55,.75); --text:#EDF3EF; --muted:#A7B9B0; --hint:#8DA195;
+  --green:#3F7A5A; --green-deep:#101914; --heading:#EDF3EF; --ochre-ink:#E89466;
+  --sand:#1A2820; --ochre-tint:#231B15; --green-tint:#13241A; --gold-tint:#252214;
+  --sky-1:#1C2A22; --sky-2:#132019; --hill-1:#2A3A2E; --hill-2:#22342A; --hill-3:#1A2A21; --hill-4:#101914; --snow:#C9D6CE; --sea:#2D5450;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1511; --surface:#152019; --surface-muted:#1A2820; --glass:rgba(21,32,25,.82);
+  --border:rgba(46,69,55,.75); --text:#EDF3EF; --muted:#A7B9B0; --hint:#8DA195;
+  --green:#3F7A5A; --green-deep:#101914; --heading:#EDF3EF; --ochre-ink:#E89466;
+  --sand:#1A2820; --ochre-tint:#231B15; --green-tint:#13241A; --gold-tint:#252214;
+  --sky-1:#1C2A22; --sky-2:#132019; --hill-1:#2A3A2E; --hill-2:#22342A; --hill-3:#1A2A21; --hill-4:#101914; --snow:#C9D6CE; --sea:#2D5450;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--glass)}
+h1,h2,h3{font-family:var(--serif);color:var(--heading);text-wrap:balance;margin:0;font-weight:700}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font:700 11px/16px var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--ochre-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--r-xl);font:700 14px/1 var(--sans);border:1px solid transparent;cursor:pointer;text-decoration:none;transition:background .15s,transform .15s}
+.btn:active{transform:translateY(1px)}
+.btn-ochre{background:var(--ochre);color:#fff}
+.btn-ochre:hover{background:var(--ochre-hover)}
+.btn-green{background:var(--green);color:var(--on-brand)}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--text)}
+.btn-ghost:hover{background:var(--surface-muted)}
+.tabnum{font-variant-numeric:tabular-nums}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--glass);border-bottom:1px solid var(--border);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+@media (prefers-reduced-transparency:reduce){header.top{background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none}}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:700 19px/1 var(--serif);letter-spacing:.04em;color:var(--heading)}
+.brand svg{width:30px;height:30px;flex:none}
+nav.links{display:flex;gap:4px;margin-left:12px}
+nav.links a{padding:8px 12px;border-radius:999px;text-decoration:none;font:600 13px/1 var(--sans);color:var(--muted)}
+nav.links a:hover{background:var(--surface-muted);color:var(--text)}
+.top .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--surface-muted);border:1px solid var(--border)}
+.seg button{border:0;background:transparent;color:var(--muted);font:700 12px/1 var(--sans);padding:7px 11px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+@media (max-width:860px){nav.links{display:none}}
+@media (max-width:520px){.top .btn{display:none}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding-block:56px 64px}
+.hero h1{font-size:clamp(44px,6.4vw,78px);line-height:.98;letter-spacing:-.015em}
+.hero h1 em{font-style:italic;color:var(--ochre-ink)}
+.hero .hero-lead{margin-top:20px;font-size:18px;line-height:1.55;color:var(--muted);max-width:30em}
+.search{margin-top:28px;display:grid;grid-template-columns:1.3fr 1fr auto;gap:8px;padding:8px;border-radius:var(--r-2xl);background:var(--surface);border:1px solid var(--border);box-shadow:0 10px 30px -18px rgba(25,44,35,.45)}
+.field{display:flex;flex-direction:column;gap:2px;padding:6px 12px;border-radius:var(--r-xl);min-width:0}
+.field:hover{background:var(--surface-muted)}
+.field label{font:700 10.5px/14px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--hint)}
+.field select{appearance:none;border:0;background:transparent;color:var(--text);font:600 15px/22px var(--sans);padding:0;min-width:0;width:100%;cursor:pointer}
+.search .btn{min-height:52px}
+.hero .chips{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:13px}
+.hero .chips span{display:inline-flex;align-items:center;gap:6px}
+.hero .chips svg{width:16px;height:16px;color:var(--green)}
+:root[data-theme="dark"] .hero .chips svg{color:var(--gold)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero .chips svg{color:var(--gold)}}
+
+.scene-wrap{position:relative;aspect-ratio:1/1.02;max-width:100%}
+.scene{position:absolute;inset:0;border-radius:var(--r-3xl);overflow:hidden;background:linear-gradient(180deg,var(--sky-1),var(--sky-2) 70%)}
+.scene svg{width:100%;height:100%;display:block}
+.float{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);box-shadow:0 18px 40px -22px rgba(25,44,35,.55);padding:14px 16px;font-size:13px}
+.float.quote{left:-28px;bottom:56px;width:250px}
+.float.wa{right:-18px;top:34px;width:236px}
+.float .row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.float .t{font:700 14px/1.3 var(--serif);color:var(--heading)}
+.float .m{color:var(--hint);font-size:12px}
+.float .price{font:700 18px/1.2 var(--sans);color:var(--ochre-ink);margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font:700 11px/16px var(--sans)}
+.pill.ok{background:var(--green-tint);color:var(--green)}
+.pill.warm{background:var(--ochre-tint);color:var(--ochre-ink)}
+.pill.gold{background:var(--gold-tint);color:var(--text)}
+:root[data-theme="dark"] .pill.ok{color:#A3E6C0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill.ok{color:#A3E6C0}}
+.wa-dot{width:8px;height:8px;border-radius:50%;background:#25D366;display:inline-block}
+@media (max-width:940px){
+  .hero .wrap{grid-template-columns:1fr;gap:40px;padding-block:36px 48px}
+  .scene-wrap{aspect-ratio:4/3}
+  .float.quote{left:12px;bottom:12px}
+  .float.wa{right:12px;top:12px}
+}
+@media (max-width:560px){
+  .search{grid-template-columns:1fr 1fr}
+  .search .btn{grid-column:1/-1}
+  .float.wa{display:none}
+  .float.quote{width:220px}
+  .scene-wrap{aspect-ratio:1/1}
+}
+
+/* Audience switch strip */
+.doors{border-block:1px solid var(--border);background:var(--surface)}
+.doors .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.door{padding:22px 24px;display:flex;gap:14px;align-items:flex-start}
+.door+.door{border-left:1px solid var(--border)}
+.door .n{font:700 26px/1 var(--serif);color:var(--ochre-ink);min-width:44px}
+.door b{display:block;font-size:14px}
+.door span{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.doors .wrap{grid-template-columns:1fr}.door+.door{border-left:0;border-top:1px solid var(--border)}}
+
+/* Sections */
+section.block{padding-block:88px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:32px}
+.sec-head h2{font-size:clamp(30px,3.6vw,44px);line-height:1.05;margin-top:8px;max-width:16em}
+.sec-head p{color:var(--muted);max-width:34em}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;align-items:center}
+.filter{border:1px solid var(--border);background:var(--surface);color:var(--text);font:600 13px/1 var(--sans);padding:10px 14px;border-radius:999px;cursor:pointer}
+.filter[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-brand)}
+.filters .note{margin-left:auto;font-size:12px;color:var(--hint)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:940px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px -26px rgba(25,44,35,.6)}
+.card .art{aspect-ratio:16/10;position:relative;background:var(--sky-1)}
+.card .art svg{width:100%;height:100%;display:block}
+.card .art .pill{position:absolute;left:12px;top:12px;background:var(--glass);color:var(--text);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-size:20px;line-height:1.2}
+.card .meta{font-size:13px;color:var(--muted)}
+.card .foot{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--border)}
+.card .from{font-size:12px;color:var(--hint)}
+.card .from b{display:block;font-size:17px;color:var(--text)}
+.card .ops{font:600 12px/1 var(--sans);color:var(--green)}
+:root[data-theme="dark"] .card .ops{color:var(--gold)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card .ops{color:var(--gold)}}
+.card[hidden]{display:none}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{padding:26px;border-radius:var(--r-2xl);background:var(--surface-muted);display:flex;flex-direction:column;gap:10px}
+.step .num{font:700 14px/1 var(--mono);color:var(--ochre-ink)}
+.step h3{font-size:22px}
+.step p{color:var(--muted);font-size:14px}
+.step .ui{margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:12px;font-size:12.5px;display:grid;gap:8px}
+.cmp{display:grid;grid-template-columns:1fr auto auto;gap:6px 14px;align-items:center}
+.cmp .h{color:var(--hint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.stars{color:var(--gold);letter-spacing:1px}
+.voucher{border:1.5px dashed var(--green);border-radius:10px;padding:10px 12px;display:grid;gap:4px}
+.voucher .code{font:700 13px/1 var(--mono);color:var(--heading)}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* Operator band */
+.ops-band{background:var(--band);color:var(--band-text);position:relative;overflow:hidden}
+.ops-band .wrap{padding-block:96px}
+.ops-band h2{color:var(--band-text)}
+.ops-band .eyebrow{color:var(--gold)}
+.ops-band .sec-head p{color:var(--band-muted)}
+.ops-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:24px;align-items:start}
+@media (max-width:980px){.ops-grid{grid-template-columns:1fr}}
+.panel{background:var(--band-card);border:1px solid var(--band-line);border-radius:var(--r-2xl);padding:18px;min-width:0}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.panel-top b{font:700 16px/1.2 var(--serif)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.kpi{background:var(--band);border:1px solid var(--band-line);border-radius:var(--r-xl);padding:12px}
+.kpi small{display:block;color:var(--band-muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.kpi strong{font:700 22px/1.3 var(--sans)}
+.kpi strong.warm{color:var(--ochre)}
+.pipe-scroll{overflow-x:auto}
+.pipe{display:grid;grid-template-columns:repeat(3,minmax(190px,1fr));gap:10px}
+.col{background:var(--band);border:1px solid var(--band-line);border-radius:var(--r-xl);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:220px}
+.col h4{margin:0 0 2px;font:700 12px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--band-muted);display:flex;justify-content:space-between}
+.lead{background:var(--band-card);border:1px solid var(--band-line);border-radius:10px;padding:10px;font-size:12.5px;display:grid;gap:4px;cursor:pointer;text-align:left;color:inherit;font-family:inherit;width:100%}
+.lead:hover{border-color:var(--ochre)}
+.lead .who{font-weight:700;font-size:13px;display:flex;justify-content:space-between;gap:8px}
+.lead .id{font:600 11px/1 var(--mono);color:var(--band-muted)}
+.lead .what{color:var(--band-muted)}
+.lead .amt{font-weight:700;color:var(--gold)}
+.lead.fresh{animation:pop .5s ease}
+@keyframes pop{from{transform:scale(.96);border-color:var(--ochre)}to{transform:none}}
+.panel-hint{margin-top:10px;font-size:12px;color:var(--band-muted)}
+
+.phone{background:#0B110E;border:1px solid var(--band-line);border-radius:28px;padding:12px;max-width:380px;width:100%;justify-self:center}
+.phone-top{display:flex;align-items:center;gap:10px;padding:6px 8px 12px;border-bottom:1px solid var(--band-line)}
+.phone-top .av{width:34px;height:34px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+.phone-top .av svg{width:22px;height:22px}
+.phone-top b{font-size:14px;display:block}
+.phone-top small{color:var(--band-muted);font-size:11.5px}
+.chat{display:flex;flex-direction:column;gap:8px;padding:12px 4px;min-height:330px}
+.msg{max-width:86%;padding:9px 11px;border-radius:12px;font:13px/1.45 var(--sans);white-space:pre-wrap;word-break:break-word}
+.msg.in{background:#1F2C25;color:var(--band-text);border-top-left-radius:4px}
+.msg.out{background:#1E4D37;color:#EAF6EF;margin-left:auto;border-top-right-radius:4px;font-family:var(--mono);font-size:12.5px}
+.msg .tm{display:block;text-align:right;font:10.5px/1 var(--sans);color:var(--band-muted);margin-top:4px}
+.msg.out .tm{color:#A7CDB9}
+.cmds{display:flex;flex-wrap:wrap;gap:6px;padding:10px 4px 4px;border-top:1px solid var(--band-line)}
+.cmd{border:1px solid var(--band-line);background:transparent;color:var(--band-text);font:600 12px/1 var(--mono);padding:9px 11px;border-radius:999px;cursor:pointer}
+.cmd:hover{border-color:var(--gold);color:var(--gold)}
+.feats{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--band-line);border:1px solid var(--band-line);border-radius:var(--r-2xl);overflow:hidden}
+.feat{background:var(--band);padding:22px;display:grid;gap:6px;align-content:start}
+.feat svg{width:22px;height:22px;color:var(--gold)}
+.feat b{font:700 17px/1.3 var(--serif)}
+.feat span{color:var(--band-muted);font-size:13.5px}
+@media (max-width:860px){.feats{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.feats{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr 1fr}.kpi strong{font-size:17px}}
+
+/* Cities */
+.cities{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.city{position:relative;border-radius:var(--r-3xl);overflow:hidden;min-height:300px;display:flex;align-items:flex-end;background:var(--sky-1)}
+.city svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.city .cap{position:relative;margin:16px;padding:18px 20px;background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--r-2xl);max-width:380px}
+.city h3{font-size:28px}
+.city p{color:var(--muted);font-size:14px;margin-top:4px}
+.city .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+@media (max-width:760px){.cities{grid-template-columns:1fr}}
+
+/* Join */
+.join{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.joincard{border-radius:var(--r-3xl);padding:32px;display:flex;flex-direction:column;gap:14px}
+.joincard.t{background:var(--sand);border:1px solid var(--border)}
+.joincard.o{background:var(--green-deep);color:var(--band-text)}
+.joincard.o h3{color:var(--band-text)}
+.joincard.o .eyebrow{color:var(--gold)}
+.joincard h3{font-size:32px;line-height:1.1}
+.joincard p{color:var(--muted)}
+.joincard.o p{color:var(--band-muted)}
+.joincard form{display:grid;gap:10px;margin-top:6px}
+.joincard input,.joincard select{width:100%;min-height:46px;border-radius:var(--r-xl);border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0 14px;font:15px var(--sans)}
+.joincard.o input,.joincard.o select{background:var(--band);border-color:var(--band-line);color:var(--band-text)}
+.joincard .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.joincard .done{font-weight:600;font-size:14px;padding:12px 14px;border-radius:var(--r-xl);background:var(--green-tint);color:var(--green)}
+.joincard.o .done{background:#1E3B29;color:#A3E6C0}
+.joincard .small{font-size:12px;color:var(--hint)}
+.joincard.o .small{color:var(--band-muted)}
+@media (max-width:820px){.join{grid-template-columns:1fr}}
+@media (max-width:420px){.joincard{padding:22px}.joincard .row2{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--border);margin-top:88px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;padding-block:28px;color:var(--muted);font-size:13px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.sun{transform-origin:center;animation:sunrise 1.6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes sunrise{from{transform:translateY(14px)}to{transform:none}}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#284435"/><path d="M16 4 L19 13 L28 16 L19 19 L16 28 L13 19 L4 16 L13 13 Z" fill="#E8B94A"/><path d="M16 8 L18 14 L24 16 L18 18 L16 24 L14 18 L8 16 L14 14 Z" fill="#D97843"/><circle cx="16" cy="16" r="2.5" fill="#FAF7F2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6l-8-3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 19.5 5.3 16A8 8 0 1 1 8 18.7L4 19.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7M9 15v3c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H6v18h12V7l-4-4Z M14 3v4h4 M9 12h6 M9 16h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.3" fill="currentColor"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="TANEXPO home"><svg><use href="#mark"/></svg>TANEXPO</a>
+    <nav class="links" aria-label="Main">
+      <a href="#explore" data-i18n="navExplore">Explore</a>
+      <a href="#how" data-i18n="navHow">How it works</a>
+      <a href="#operators" data-i18n="navOps">For operators</a>
+      <a href="#cities" data-i18n="navCities">Launch cities</a>
+    </nav>
+    <div class="right">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="sw" aria-pressed="false">SW</button>
+      </div>
+      <a class="btn btn-green" href="#join" data-i18n="navJoin">List your business</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" data-i18n="heroEyebrow">Tanzania's tourism marketplace</div>
+      <h1 style="margin-top:14px"><span data-i18n="heroH1a">Karibu.</span><br><em data-i18n="heroH1b">Find your Tanzania</em><br><span data-i18n="heroH1c">with people who know it.</span></h1>
+      <p class="hero-lead" data-i18n="heroLead">Compare verified local operators, see real prices in TZS or USD, and book directly. Safaris, mountains, islands and cities, all in one place.</p>
+      <form class="search" id="heroSearch">
+        <div class="field">
+          <label for="q-where" data-i18n="fWhere">Where to</label>
+          <select id="q-where">
+            <option value="all">Anywhere in Tanzania</option>
+            <option value="safari">Serengeti &amp; the north</option>
+            <option value="mountain">Kilimanjaro</option>
+            <option value="beach">Zanzibar &amp; the coast</option>
+            <option value="city">Dar es Salaam &amp; Arusha</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="q-budget" data-i18n="fBudget">Budget per person</label>
+          <select id="q-budget">
+            <option value="any">Any budget</option>
+            <option value="500">Up to USD 500</option>
+            <option value="1500">Up to USD 1,500</option>
+            <option value="3000">Up to USD 3,000</option>
+          </select>
+        </div>
+        <button class="btn btn-ochre" type="submit" data-i18n="fGo">Find operators</button>
+      </form>
+      <div class="chips">
+        <span><svg><use href="#i-shield"/></svg><span data-i18n="c1">TALA-licensed operators</span></span>
+        <span><svg><use href="#i-chat"/></svg><span data-i18n="c2">English &amp; Kiswahili</span></span>
+        <span><svg><use href="#i-wifi"/></svg><span data-i18n="c3">Light on mobile data</span></span>
+      </div>
+    </div>
+
+    <div class="scene-wrap">
+      <div class="scene">
+        <svg viewBox="0 0 600 612" preserveAspectRatio="xMidYMid slice" aria-label="Kilimanjaro rising above the savanna at sunrise" role="img">
+          <g class="sun"><circle cx="410" cy="250" r="86" fill="var(--gold)" opacity=".9"/><circle cx="410" cy="250" r="60" fill="var(--ochre)" opacity=".85"/></g>
+          <path d="M0 360 L120 300 L210 250 L250 214 L290 196 L322 192 L356 206 L400 240 L470 282 L600 330 L600 612 L0 612Z" fill="var(--hill-1)"/>
+          <path d="M250 214 L290 196 L322 192 L356 206 L372 218 L352 222 L336 214 L318 224 L300 214 L282 226 L266 220Z" fill="var(--snow)"/>
+          <path d="M0 420 C90 392 170 380 260 396 C350 412 430 388 600 364 L600 612 L0 612Z" fill="var(--hill-2)"/>
+          <path d="M0 482 C120 452 230 470 330 462 C430 454 520 432 600 440 L600 612 L0 612Z" fill="var(--hill-3)"/>
+          <g fill="var(--hill-4)">
+            <path d="M92 476 l3 -46 h4 l3 46z"/><path d="M44 436 C60 420 140 420 156 436 C130 432 70 432 44 436Z"/><path d="M58 430 C80 414 124 414 144 430Z"/>
+            <path d="M468 452 l2 -32 h3 l2 32z"/><path d="M432 424 C446 412 500 412 512 424 C490 421 452 421 432 424Z"/>
+            <path d="M0 530 C140 506 260 524 380 516 C480 510 560 500 600 504 L600 612 L0 612Z"/>
+          </g>
+          <g fill="var(--hill-4)" opacity=".9">
+            <path d="M300 506 c2-14 8-22 14-24 l3-14 3 1-2 13 c8 2 14 10 14 24z"/>
+            <path d="M330 506 c1-10 5-16 10-18 l2-10 3 1-2 9 c6 2 10 8 10 18z"/>
+          </g>
+        </svg>
+      </div>
+      <div class="float wa" aria-hidden="true">
+        <div class="row"><span class="m"><span class="wa-dot"></span>&nbsp; WhatsApp</span><span class="m">07:42</span></div>
+        <div class="t" style="margin-top:6px">TANEXPO Lead #1042</div>
+        <div class="m" style="color:var(--muted)">Package: Serengeti 4-day safari<br>2 guests · 12 Dec</div>
+      </div>
+      <div class="float quote" aria-hidden="true">
+        <div class="row"><span class="pill ok"><svg width="12" height="12"><use href="#i-check"/></svg> Verified</span><span class="m">Arusha</span></div>
+        <div class="t" style="margin-top:8px">Ngorongoro day trip</div>
+        <div class="m">Park fees, lunch, 4x4 included</div>
+        <div class="price tabnum" data-price="260">USD 260</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="doors">
+  <div class="wrap">
+    <div class="door"><div class="n tabnum">2</div><div><b data-i18n="d1b">Sides, one platform</b><span data-i18n="d1s">Travellers find and book. Operators run their whole business.</span></div></div>
+    <div class="door"><div class="n">TZS</div><div><b data-i18n="d2b">Prices you can trust</b><span data-i18n="d2s">Every quote in shillings or dollars, with fees spelled out.</span></div></div>
+    <div class="door"><div class="n">24/7</div><div><b data-i18n="d3b">Leads on WhatsApp</b><span data-i18n="d3s">Operators accept and quote from the app they already use.</span></div></div>
+  </div>
+</div>
+
+<section class="block" id="explore">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="exEyebrow">For travellers</div><h2 data-i18n="exH2">Where do you want to wake up?</h2></div>
+      <p data-i18n="exP">Every listing comes from a licensed local operator. Pick a place, compare who runs trips there, and ask for a quote in one tap.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filter destinations">
+      <button class="filter" type="button" data-f="all" aria-pressed="true">All</button>
+      <button class="filter" type="button" data-f="safari" aria-pressed="false">Safari</button>
+      <button class="filter" type="button" data-f="mountain" aria-pressed="false">Mountain</button>
+      <button class="filter" type="button" data-f="beach" aria-pressed="false">Beach &amp; islands</button>
+      <button class="filter" type="button" data-f="city" aria-pressed="false">City &amp; culture</button>
+      <div class="seg" role="group" aria-label="Currency" style="margin-left:auto">
+        <button type="button" data-cur="USD" aria-pressed="true">USD</button>
+        <button type="button" data-cur="TZS" aria-pressed="false">TZS</button>
+      </div>
+    </div>
+    <div class="grid" id="destGrid"></div>
+    <p class="small" style="margin-top:14px;font-size:12px;color:var(--hint)">Sample listings and prices for preview. TZS shown at an illustrative rate of 2,500 per USD.</p>
+  </div>
+</section>
+
+<section class="block" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="howEyebrow">How booking works</div><h2 data-i18n="howH2">From "where?" to a voucher in three steps</h2></div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h3 data-i18n="s1h">Compare</h3>
+        <p data-i18n="s1p">Put operators side by side: price, what's included, reviews from verified trips.</p>
+        <div class="ui">
+          <div class="cmp"><span class="h">Operator</span><span class="h">Rating</span><span class="h">From</span>
+            <span>Kilele Treks</span><span class="stars" aria-label="4.9 stars">★★★★★</span><b class="tabnum" data-price="1850">USD 1,850</b>
+            <span>Ndovu Safaris</span><span class="stars" aria-label="4.7 stars">★★★★☆</span><b class="tabnum" data-price="1620">USD 1,620</b>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3 data-i18n="s2h">Request a quote</h3>
+        <p data-i18n="s2p">Tell them your dates, group size and budget. The operator replies with a firm price, often within the hour.</p>
+        <div class="ui">
+          <div style="display:flex;justify-content:space-between"><span>Serengeti 4-day safari</span><span class="pill warm">Quote Sent</span></div>
+          <div style="color:var(--muted)">2 guests · 12–15 Dec · includes park fees</div>
+          <b class="tabnum" style="color:var(--ochre-ink);font-size:16px" data-price="2350">USD 2,350</b>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3 data-i18n="s3h">Book &amp; go</h3>
+        <p data-i18n="s3p">Confirm and get a booking voucher on your phone, ready to show on the day.</p>
+        <div class="ui">
+          <div class="voucher">
+            <span class="pill ok" style="justify-self:start"><svg width="12" height="12"><use href="#i-check"/></svg> Confirmed</span>
+            <span class="code">TNX-1042-SRG</span>
+            <span style="color:var(--muted)">Pickup: Arusha, 06:30</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ops-band" id="operators">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="opEyebrow">For tour operators</div><h2 data-i18n="opH2">Your whole business, from one dashboard and WhatsApp</h2></div>
+      <p data-i18n="opP">Stop losing travellers in scattered DMs and spreadsheets. TANEXPO brings you leads, then gives you the tools to win them, deliver the trip and get paid.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="panel">
+        <div class="panel-top">
+          <b>Leads pipeline</b>
+          <span class="pill" style="background:#2A2117;color:var(--gold)">Sample data</span>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><small>Needs Reply</small><strong class="warm tabnum" id="kNew">3</strong></div>
+          <div class="kpi"><small>Quoted</small><strong class="tabnum" id="kQuoted">2</strong></div>
+          <div class="kpi"><small>Booked, Dec</small><strong class="tabnum">TZS 9.8M</strong></div>
+        </div>
+        <div class="pipe-scroll">
+          <div class="pipe">
+            <div class="col" id="colNew"><h4><span>New</span><span class="tabnum" data-count></span></h4></div>
+            <div class="col" id="colQuoted"><h4><span>Quote Sent</span><span class="tabnum" data-count></span></h4></div>
+            <div class="col" id="colBooked"><h4><span>Confirmed</span><span class="tabnum" data-count></span></h4></div>
+          </div>
+        </div>
+        <p class="panel-hint">Tap a lead to move it along, or use the WhatsApp commands on the right.</p>
+      </div>
+
+      <div class="phone" aria-label="WhatsApp demo">
+        <div class="phone-top">
+          <div class="av"><svg><use href="#mark"/></svg></div>
+          <div><b>TANEXPO Operator</b><small>WhatsApp · online</small></div>
+        </div>
+        <div class="chat" id="chat" aria-live="polite"></div>
+        <div class="cmds">
+          <button class="cmd" type="button" data-cmd="LEADS">LEADS</button>
+          <button class="cmd" type="button" data-cmd="ACCEPT">ACCEPT 1042</button>
+          <button class="cmd" type="button" data-cmd="QUOTE">QUOTE 1042 5875000</button>
+          <button class="cmd" type="button" data-cmd="HELP">HELP</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="feats">
+      <div class="feat"><svg><use href="#i-funnel"/></svg><b>Leads pipeline</b><span>Every inquiry in one place, with "Needs Reply" at the top so nobody waits.</span></div>
+      <div class="feat"><svg><use href="#i-doc"/></svg><b>Quote builder</b><span>Line up park fees, transport and meals into a clean TZS quote in a minute.</span></div>
+      <div class="feat"><svg><use href="#i-cal"/></svg><b>Bookings</b><span>Dates, guests, pickup times and vouchers, all tracked.</span></div>
+      <div class="feat"><svg><use href="#i-coins"/></svg><b>Financials</b><span>A simple ledger of deposits, balances and what's owed, in shillings.</span></div>
+      <div class="feat"><svg><use href="#i-star"/></svg><b>Reviews</b><span>Only travellers who booked can review, and you can reply to each one.</span></div>
+      <div class="feat"><svg><use href="#i-shield"/></svg><b>Verified badge</b><span>Add your TALA licence once and show travellers you're the real thing.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="cities">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="ciEyebrow">Launching first in</div><h2 data-i18n="ciH2">Two cities, two gateways</h2></div>
+      <p data-i18n="ciP">We start where Tanzania's trips begin, then grow across the country and the region.</p>
+    </div>
+    <div class="cities">
+      <div class="city">
+        <svg class="bg" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="600" height="340" fill="var(--sky-1)"/>
+          <circle cx="470" cy="110" r="54" fill="var(--gold)" opacity=".85"/>
+          <path d="M0 210 L170 120 L250 92 L300 86 L340 98 L430 150 L600 200 V340 H0Z" fill="var(--hill-1)"/>
+          <path d="M248 93 L300 86 L340 98 L322 104 L300 96 L276 106Z" fill="var(--snow)"/>
+          <path d="M0 250 C150 220 300 236 600 220 V340 H0Z" fill="var(--hill-2)"/>
+          <path d="M0 290 C180 270 380 290 600 270 V340 H0Z" fill="var(--hill-3)"/>
+        </svg>
+        <div class="cap">
+          <h3>Arusha</h3>
+          <p>Gateway to the northern circuit: Serengeti, Ngorongoro, Tarangire and Kilimanjaro.</p>
+          <div class="tags"><span class="pill ok">Safaris</span><span class="pill gold">Treks</span><span class="pill warm">Day trips</span></div>
+        </div>
+      </div>
+      <div class="city">
+        <svg class="bg" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="600" height="340" fill="var(--sky-1)"/>
+          <circle cx="140" cy="120" r="50" fill="var(--ochre)" opacity=".8"/>
+          <g fill="var(--hill-3)">
+            <rect x="300" y="120" width="34" height="120"/><rect x="342" y="90" width="40" height="150"/><rect x="390" y="140" width="28" height="100"/><rect x="426" y="104" width="36" height="136"/><rect x="470" y="150" width="30" height="90"/><rect x="508" y="128" width="26" height="112"/>
+          </g>
+          <path d="M0 240 H600 V340 H0Z" fill="var(--sea)"/>
+          <path d="M0 262 C60 256 120 268 180 262 S300 256 360 262 480 268 600 262" stroke="var(--sky-2)" stroke-width="3" fill="none" opacity=".7"/>
+          <path d="M70 250 L120 250 L112 262 L78 262Z M95 250 L95 200 L130 246Z" fill="var(--hill-4)"/>
+        </svg>
+        <div class="cap">
+          <h3>Dar es Salaam</h3>
+          <p>The coast and the city: island hops, Kariakoo market, food walks and ferries to Zanzibar.</p>
+          <div class="tags"><span class="pill ok">Islands</span><span class="pill gold">Culture</span><span class="pill warm">Food tours</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="join" style="padding-top:0">
+  <div class="wrap">
+    <div class="join">
+      <div class="joincard t">
+        <div class="eyebrow" data-i18n="jtEyebrow">Travellers</div>
+        <h3 data-i18n="jtH">Plan a trip with a local who knows the way</h3>
+        <p data-i18n="jtP">Tell us where you're headed and we'll let you know when operators there are live.</p>
+        <form id="formT">
+          <input id="jt-email" type="email" required placeholder="you@email.com" aria-label="Email">
+          <select id="jt-where" aria-label="Where are you going">
+            <option>Serengeti &amp; the north</option><option>Kilimanjaro</option><option>Zanzibar &amp; the coast</option><option>Dar es Salaam</option><option>Not sure yet</option>
+          </select>
+          <button class="btn btn-ochre" type="submit" data-i18n="jtBtn">Get early access</button>
+        </form>
+        <p class="small">We only use this to contact you about TANEXPO.</p>
+      </div>
+      <div class="joincard o">
+        <div class="eyebrow" data-i18n="joEyebrow">Tour operators</div>
+        <h3 data-i18n="joH">List your business. Get leads on WhatsApp.</h3>
+        <p data-i18n="joP">Free to join during launch in Arusha and Dar es Salaam. Bring your TALA licence and your best packages.</p>
+        <form id="formO">
+          <input id="jo-name" required placeholder="Business name" aria-label="Business name">
+          <div class="row2">
+            <select id="jo-city" aria-label="City"><option>Arusha</option><option>Dar es Salaam</option><option>Moshi</option><option>Zanzibar</option><option>Other</option></select>
+            <select id="jo-type" aria-label="Type of business"><option>Safari operator</option><option>Trek &amp; climb</option><option>Beach &amp; boats</option><option>City &amp; culture</option><option>Hotel / lodge</option></select>
+          </div>
+          <input id="jo-wa" type="tel" required placeholder="WhatsApp number, e.g. +255 7…" aria-label="WhatsApp number">
+          <button class="btn btn-ochre" type="submit" data-i18n="joBtn">List my business</button>
+        </form>
+        <p class="small">Our team will reach out on WhatsApp to get you set up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top" style="font-size:16px"><svg style="width:24px;height:24px"><use href="#mark"/></svg>TANEXPO</a>
+    <span>Dar es Salaam · Arusha · Tanzania</span>
+    <span data-i18n="foot">Built in Tanzania, for Tanzania's tourism.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const RATE = 2500;
+  let cur = 'USD';
+  const fmt = usd => cur === 'USD' ? 'USD ' + usd.toLocaleString('en-US') : 'TZS ' + (usd*RATE).toLocaleString('en-US');
+
+  /* ---------- Destinations ---------- */
+  const D = [
+    {k:'safari', name:'Serengeti National Park', meta:'Great Migration · 3–6 days', from:1450, ops:14, scene:'savanna', tag:'Safari'},
+    {k:'safari', name:'Ngorongoro Crater', meta:'Crater floor game drive · 1–2 days', from:260, ops:11, scene:'crater', tag:'Safari'},
+    {k:'mountain', name:'Mount Kilimanjaro', meta:'5,895 m · Machame & Lemosho routes', from:1850, ops:9, scene:'kili', tag:'Mountain'},
+    {k:'beach', name:'Zanzibar Stone Town & beaches', meta:'Spice farms, dhow trips · 2–5 days', from:340, ops:12, scene:'beach', tag:'Beach'},
+    {k:'safari', name:'Tarangire National Park', meta:'Elephants & baobabs · 1–3 days', from:310, ops:8, scene:'baobab', tag:'Safari'},
+    {k:'city', name:'Dar es Salaam city & islands', meta:'Kariakoo, Bongoyo Island · half day', from:45, ops:7, scene:'city', tag:'City'}
+  ];
+  const scenes = {
+    savanna:`<rect width="320" height="200" fill="var(--sky-1)"/><circle cx="240" cy="78" r="30" fill="var(--gold)" opacity=".9"/><path d="M0 130 C80 118 200 124 320 112 V200 H0Z" fill="var(--hill-1)"/><path d="M0 160 C100 148 220 158 320 150 V200 H0Z" fill="var(--hill-2)"/><g fill="var(--hill-4)"><path d="M70 150 l2-34 h3 l2 34z"/><path d="M42 118 C56 106 98 106 110 118 C92 115 60 115 42 118Z"/><path d="M196 140 c2-12 6-18 11-20 l2-12 3 1-2 11 c6 2 11 8 11 20z"/></g>`,
+    crater:`<rect width="320" height="200" fill="var(--sky-2)"/><path d="M0 92 C60 70 120 66 160 66 S260 70 320 92 V200 H0Z" fill="var(--hill-3)"/><ellipse cx="160" cy="150" rx="150" ry="44" fill="var(--hill-1)"/><ellipse cx="190" cy="152" rx="44" ry="10" fill="var(--sea)"/><g fill="var(--hill-4)"><circle cx="110" cy="146" r="3"/><circle cx="120" cy="150" r="3"/><circle cx="132" cy="144" r="3"/></g>`,
+    kili:`<rect width="320" height="200" fill="var(--sky-1)"/><path d="M0 150 L90 110 L130 80 L170 70 L210 84 L320 140 V200 H0Z" fill="var(--hill-2)"/><path d="M128 82 L170 70 L210 84 L196 90 L178 82 L160 92 L144 84Z" fill="var(--snow)"/><path d="M0 172 C90 160 200 170 320 160 V200 H0Z" fill="var(--hill-3)"/><circle cx="60" cy="54" r="18" fill="var(--ochre)" opacity=".75"/>`,
+    beach:`<rect width="320" height="200" fill="var(--sky-2)"/><circle cx="80" cy="66" r="26" fill="var(--gold)"/><rect y="112" width="320" height="50" fill="var(--sea)"/><path d="M0 156 C100 146 220 160 320 150 V200 H0Z" fill="var(--hill-1)"/><g fill="var(--hill-4)"><path d="M210 140 L262 140 L254 150 L218 150Z"/><path d="M236 140 L236 92 L270 136Z"/></g><path d="M40 162 q2-34 18-50" stroke="var(--hill-4)" stroke-width="4" fill="none"/><path d="M58 112 c-14-4-24 2-28 8 M58 112 c10-10 22-10 28-6 M58 112 c-4-12 2-20 8-24" stroke="var(--hill-3)" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+    baobab:`<rect width="320" height="200" fill="var(--sky-1)"/><circle cx="250" cy="70" r="26" fill="var(--ochre)" opacity=".8"/><path d="M0 150 C100 140 220 148 320 138 V200 H0Z" fill="var(--hill-1)"/><g fill="var(--hill-4)"><path d="M120 152 c4-30 4-50 0-70 h26 c-4 20-4 40 0 70z"/><path d="M122 84 l-24-22 M128 82 l-6-28 M140 82 l10-26 M144 84 l26-18" stroke="var(--hill-4)" stroke-width="6" stroke-linecap="round"/><ellipse cx="226" cy="146" rx="20" ry="11"/><path d="M210 146 l-6 18 M218 150 l-2 14 M236 150 l2 14 M244 146 l4 18 M246 140 c10 0 14 8 12 20" stroke="var(--hill-4)" stroke-width="5" stroke-linecap="round" fill="none"/></g>`,
+    city:`<rect width="320" height="200" fill="var(--sky-2)"/><g fill="var(--hill-3)"><rect x="150" y="70" width="22" height="80"/><rect x="178" y="50" width="26" height="100"/><rect x="210" y="84" width="20" height="66"/><rect x="236" y="62" width="24" height="88"/><rect x="266" y="96" width="20" height="54"/></g><rect y="150" width="320" height="50" fill="var(--sea)"/><path d="M30 146 L80 146 L72 158 L38 158Z M55 146 L55 104 L86 142Z" fill="var(--hill-4)"/><circle cx="70" cy="60" r="20" fill="var(--gold)" opacity=".85"/>`
+  };
+  const grid = document.getElementById('destGrid');
+  grid.innerHTML = D.map((d,i)=>`
+    <article class="card" data-k="${d.k}" data-from="${d.from}">
+      <div class="art"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${scenes[d.scene]}</svg><span class="pill">${d.tag}</span></div>
+      <div class="body">
+        <h3>${d.name}</h3>
+        <div class="meta">${d.meta}</div>
+        <div class="foot">
+          <div class="from">from<b class="tabnum" data-price="${d.from}">${fmt(d.from)}</b></div>
+          <span class="ops tabnum">${d.ops} operators →</span>
+        </div>
+      </div>
+    </article>`).join('');
+
+  let filterK = 'all', maxBudget = Infinity;
+  function applyFilter(){
+    grid.querySelectorAll('.card').forEach(c=>{
+      const okK = filterK==='all' || c.dataset.k===filterK;
+      const okB = +c.dataset.from <= maxBudget;
+      c.hidden = !(okK && okB);
+    });
+    document.querySelectorAll('.filter').forEach(b=>b.setAttribute('aria-pressed', b.dataset.f===filterK));
+  }
+  document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{filterK=b.dataset.f;applyFilter();}));
+  document.getElementById('heroSearch').addEventListener('submit',e=>{
+    e.preventDefault();
+    filterK = document.getElementById('q-where').value;
+    const b = document.getElementById('q-budget').value;
+    maxBudget = b==='any' ? Infinity : +b;
+    applyFilter();
+    document.getElementById('explore').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto':'smooth'});
+  });
+
+  function renderPrices(){
+    document.querySelectorAll('[data-price]').forEach(el=>{el.textContent = fmt(+el.dataset.price);});
+    document.querySelectorAll('[data-cur]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.cur===cur));
+  }
+  document.querySelectorAll('[data-cur]').forEach(b=>b.addEventListener('click',()=>{cur=b.dataset.cur;renderPrices();}));
+
+  /* ---------- Pipeline ---------- */
+  const leads = [
+    {id:1042, who:'Anna M.', what:'Serengeti 4-day safari · 2 guests · 12 Dec', amt:null, stage:'new'},
+    {id:1043, who:'Juma K.', what:'Zanzibar spice tour · 4 guests · 20 Dec', amt:null, stage:'new'},
+    {id:1045, who:'Lea & Tom', what:'Kilimanjaro, Machame 7-day · 2 guests', amt:null, stage:'new'},
+    {id:1038, who:'Grace O.', what:'Ngorongoro day trip · 3 guests · 9 Dec', amt:1950000, stage:'quoted'},
+    {id:1036, who:'Hiro T.', what:'Tarangire 2-day · 2 guests · 15 Dec', amt:1550000, stage:'quoted'},
+    {id:1031, who:'Fatma S.', what:'Serengeti 5-day · 4 guests · 3 Dec', amt:9800000, stage:'booked'}
+  ];
+  const cols = {new:document.getElementById('colNew'), quoted:document.getElementById('colQuoted'), booked:document.getElementById('colBooked')};
+  const tzs = n => 'TZS ' + n.toLocaleString('en-US');
+  let flash = null;
+  function renderPipe(){
+    Object.values(cols).forEach(c=>c.querySelectorAll('.lead').forEach(n=>n.remove()));
+    leads.forEach(l=>{
+      const b = document.createElement('button');
+      b.type='button'; b.className='lead' + (flash===l.id?' fresh':'');
+      b.innerHTML = `<span class="who"><span>${l.who}</span><span class="id">#${l.id}</span></span><span class="what">${l.what}</span>${l.amt?`<span class="amt tabnum">${tzs(l.amt)}</span>`:''}`;
+      b.addEventListener('click',()=>{ if(l.stage==='new'){ l.stage='quoted'; l.amt = l.amt || 2500000; } else if(l.stage==='quoted'){ l.stage='booked'; } else return; flash=l.id; renderPipe(); });
+      cols[l.stage].appendChild(b);
+    });
+    for (const [k,c] of Object.entries(cols)) c.querySelector('[data-count]').textContent = leads.filter(l=>l.stage===k).length;
+    document.getElementById('kNew').textContent = leads.filter(l=>l.stage==='new').length;
+    document.getElementById('kQuoted').textContent = leads.filter(l=>l.stage==='quoted').length;
+    flash = null;
+  }
+  renderPipe();
+
+  /* ---------- WhatsApp demo (message formats match the TANEXPO server) ---------- */
+  const chat = document.getElementById('chat');
+  let t = 42;
+  const time = () => '07:' + String(t++).padStart(2,'0');
+  function say(text, dir){
+    const m = document.createElement('div');
+    m.className = 'msg ' + dir;
+    m.textContent = text;
+    const s = document.createElement('span'); s.className='tm'; s.textContent = time();
+    m.appendChild(s); chat.appendChild(m);
+    while (chat.children.length > 5) chat.removeChild(chat.firstChild);
+  }
+  say('TANEXPO Lead #1042\nTraveler: Anna M. (2 guests)\nPackage: Serengeti 4-day safari\nDate: 12 Dec\nReply:\n• ACCEPT 1042\n• QUOTE 1042 <amountTZS> [note]', 'in');
+  const L = id => leads.find(l=>l.id===id);
+  const replies = {
+    LEADS: ()=>{ const n = leads.filter(l=>l.stage==='new'); return n.length ? 'Active Leads:\n' + n.map(l=>`#${l.id} ${l.who} · ${l.what.split(' · ')[0]}`).join('\n') + '\nReply: ACCEPT <id> or QUOTE <id> <TZS>' : 'No new leads right now.'; },
+    ACCEPT: ()=>{ const l=L(1042); return `Lead #1042 (${l.who}) marked Contacted. Send a quote anytime with:\nQUOTE 1042 <amountTZS> [note]`; },
+    QUOTE: ()=>{ const l=L(1042); if(l.stage==='new'){ l.stage='quoted'; l.amt=5875000; flash=1042; renderPipe(); } return 'Quote of TZS 5,875,000 sent to Anna M. for Lead #1042.'; },
+    HELP: ()=>'TANEXPO Operator commands:\nLEADS / MAOMBI\nACCEPT <id> / KUBALI\nQUOTE <id> <TZS> / BEI\nREPLY <id> <msg> / JIBU\nPAUSE · RESUME'
+  };
+  const sent = {LEADS:'LEADS', ACCEPT:'ACCEPT 1042', QUOTE:'QUOTE 1042 5875000', HELP:'HELP'};
+  document.querySelectorAll('.cmd').forEach(b=>b.addEventListener('click',()=>{
+    const c = b.dataset.cmd; say(sent[c], 'out');
+    setTimeout(()=>say(replies[c](), 'in'), 450);
+  }));
+
+  /* ---------- Forms (preview only) ---------- */
+  const SB_URL = 'https://tzucllooekayvrvprktr.supabase.co/rest/v1/signups';
+  const SB_KEY = 'sb_publishable_RrrhIk1JIc-bhiuLyW66DA_wBM-TmsM';
+  function wire(id, build, okMsg){
+    const f = document.getElementById(id);
+    f.addEventListener('submit', async e=>{
+      e.preventDefault();
+      const btn = f.querySelector('button[type="submit"]'); const label = btn.innerHTML;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      f.querySelector('.err')?.remove();
+      try{
+        const r = await fetch(SB_URL, {method:'POST', headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'}, body: JSON.stringify(Object.assign(build(), {lang: document.documentElement.lang==='sw'?'sw':'en'}))});
+        if(!r.ok) throw new Error(r.status);
+        const d = document.createElement('div'); d.className='done'; d.setAttribute('role','status'); d.textContent = okMsg; f.replaceWith(d);
+      }catch(err){
+        btn.disabled = false; btn.innerHTML = label;
+        const p = document.createElement('p'); p.className='err small'; p.setAttribute('role','alert'); p.style.color='var(--ochre-ink)';
+        p.textContent = "That didn't go through. Check the details (WhatsApp numbers use digits, like +255 712 345 678) and try again.";
+        f.appendChild(p);
+      }
+    });
+  }
+  const v = id => document.getElementById(id).value.trim();
+  wire('formT', ()=>({kind:'traveller', email:v('jt-email'), destination:v('jt-where')}), "You're on the list. We'll email you when operators for your trip are live.");
+  wire('formO', ()=>({kind:'operator', business_name:v('jo-name'), city:v('jo-city'), business_type:v('jo-type'), whatsapp:v('jo-wa')}), "Asante! You're on the list. We'll message you on WhatsApp to get your listing set up.");
+
+  /* ---------- Language ---------- */
+  const SW = {
+    navExplore:'Gundua', navHow:'Jinsi inavyofanya kazi', navOps:'Kwa waendeshaji', navCities:'Miji ya kuanzia', navJoin:'Sajili biashara yako',
+    heroEyebrow:'Soko la utalii la Tanzania', heroH1a:'Karibu.', heroH1b:'Gundua Tanzania yako', heroH1c:'na wenyeji wanaoijua.',
+    heroLead:'Linganisha waendeshaji wa ndani waliothibitishwa, ona bei halisi kwa TZS au USD, na weka nafasi moja kwa moja.',
+    fWhere:'Unaenda wapi', fBudget:'Bajeti kwa mtu', fGo:'Tafuta waendeshaji',
+    c1:'Waendeshaji wenye leseni ya TALA', c2:'Kiingereza na Kiswahili', c3:'Hutumia data kidogo',
+    exEyebrow:'Kwa wasafiri', exH2:'Ungependa kuamkia wapi?', exP:'Kila tangazo linatoka kwa mwendeshaji wa ndani mwenye leseni. Chagua mahali, linganisha, na omba bei.',
+    howEyebrow:'Jinsi ya kuweka nafasi', howH2:'Hatua tatu hadi kupata vocha', s1h:'Linganisha', s2h:'Omba bei', s3h:'Weka nafasi, safiri',
+    opEyebrow:'Kwa waendeshaji wa utalii', opH2:'Biashara yako yote, kwenye dashibodi moja na WhatsApp',
+    ciEyebrow:'Tunaanzia', ciH2:'Miji miwili, milango miwili',
+    jtEyebrow:'Wasafiri', jtBtn:'Jiunge mapema', joEyebrow:'Waendeshaji wa utalii', joH:'Sajili biashara yako. Pata wateja kupitia WhatsApp.', joBtn:'Sajili biashara yangu',
+    foot:'Imejengwa Tanzania, kwa utalii wa Tanzania.'
+  };
+  const EN = {};
+  document.querySelectorAll('[data-i18n]').forEach(el=>{EN[el.dataset.i18n]=el.innerHTML;});
+  function setLang(l){
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; el.innerHTML = (l==='sw' && SW[k]) ? SW[k] : EN[k]; });
+    document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===l));
+    try{ localStorage.setItem('tnx-lang', l); }catch(e){}
+  }
+  document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+  try{ const s = localStorage.getItem('tnx-lang'); if(s==='sw') setLang('sw'); }catch(e){}
+})();
+</script>
+
+</body>
+</html>
